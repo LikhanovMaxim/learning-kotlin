@@ -5,7 +5,6 @@ pluginManagement {
         kotlin("jvm") version kotlinVersion
         kotlin("plugin.serialization") version kotlinVersion
         id("kotlinx-atomicfu") version atomicFuVersion
-        id("com.github.johnrengelman.shadow") version "5.2.0"
     }
 
     repositories {
