@@ -5,8 +5,10 @@ plugins {
     application
 }
 
-application {
-    mainClassName = "com.HelloKt" //TODO package
+application {//TODO package
+//    mainClassName = "com.HelloKt"
+    mainClassName = "com.test2code.AtomicSinglethonKt"
+//    mainClassName = "com.test2code.SimpleClassKt"
 }
 
 dependencies {
@@ -18,9 +20,9 @@ dependencies {
 
     //provided by admin
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm")
+    implementation("org.jetbrains.kotlinx:atomicfu")
 
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.jetbrains.kotlinx:atomicfu")
 }
 
