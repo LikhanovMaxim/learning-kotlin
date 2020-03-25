@@ -1,43 +1,55 @@
-import org.jetbrains.kotlin.konan.target.*
-
 plugins {
-    kotlin("jvm") version "1.3.60"
-    kotlin("multiplatform") version "1.3.60" apply(false)
-    application
-    java
-//    kotlin("plugin.serialization")
-//    id("kotlinx-atomicfu")
-//    id("org.jetbrains.kotlinx:atomicfu-gradle-plugin") version "0.14.2"
-//    id("kotlinx-atomicfu")
-
+    base
+    distribution
+    kotlin("jvm") apply false
 }
 
-repositories {
-    jcenter()
-    mavenLocal()
-//    maven(url = "http://oss.jfrog.org/oss-release-local")
-    gradlePluginPortal()
-    maven(url = "https://dl.bintray.com/kotlin/kotlinx/")
+val atomicFuVersion: String by project
+val ktorVersion: String by project
+
+subprojects {
+    apply<BasePlugin>()
+
+    repositories {
+        mavenLocal()
+        maven(url = "https://oss.jfrog.org/artifactory/list/oss-release-local")
+        mavenCentral()
+        jcenter()
+    }
+
+    val constraints = listOf(
+        "org.jetbrains.kotlinx:atomicfu:$atomicFuVersion",
+        "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0",
+        "org.jetbrains.kotlinx:kotlinx-serialization-cbor:0.20.0",
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4",
+        "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.1",
+        "com.epam.drill:kodux-jvm:0.1.6",
+        "org.jetbrains.xodus:xodus-entity-store:1.3.91",
+        "io.ktor:ktor-locations:$ktorVersion",
+        "org.jacoco:org.jacoco.core:0.8.5",
+        "org.junit.jupiter:junit-jupiter:5.5.2"
+    ).map(dependencies.constraints::create)
+
+    configurations.all {
+        dependencyConstraints += constraints
+    }
+
+    tasks {
+        withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+            kotlinOptions {
+                jvmTarget = "1.8"
+                allWarningsAsErrors = true
+                freeCompilerArgs = listOf(
+                    "-Xuse-experimental=kotlin.Experimental",
+                    "-Xuse-experimental=kotlin.time.ExperimentalTime"
+                )
+            }
+        }
+
+        clean {
+            delete("distr", "work")
+        }
+    }
 }
 
-dependencies {
-    implementation(kotlin("stdlib"))
-
-    implementation("org.eclipse.jetty:jetty-servlet:9.4.6.v20170531")
-    implementation("javax.servlet:javax.servlet-api:3.1.0")
-    implementation("ch.qos.logback:logback-classic:1.2.3")
-    implementation("io.github.microutils:kotlin-logging:1.7.8")
-
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime")
-//    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor")
-    implementation("org.jetbrains.kotlinx:atomicfu:0.14.2")
-    implementation("org.jetbrains.kotlinx:atomicfu-gradle-plugin:0.14.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.1")
-}
-
-
-application {
-    mainClassName = "com.HelloKt" //TODO package
-}
-
+val pluginConfigJson = file("plugin_config.json")
