@@ -8,7 +8,8 @@ plugins {
 application {//TODO package
 //    mainClassName = "com.HelloKt"
 //    mainClassName = "com.test2code.AtomicSinglethonKt"
-    mainClassName = "com.test2code.SimpleClassKt"
+//    mainClassName = "com.test2code.SimpleClassKt"
+    mainClassName = "com.test2code.SameAsTest2CodeKt"
 }
 
 dependencies {
