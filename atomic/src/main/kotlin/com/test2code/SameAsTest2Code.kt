@@ -4,29 +4,35 @@ import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.updateAndGet
 import kotlinx.collections.immutable.persistentHashMapOf
 
+typealias AgentSummary = Map<String, SummaryDto>
 
 fun main() {
-    globalState.aggregateMessage(GroupAgentId("serviceGroupId", "agentId"), SummaryDto("first"))
-    val res = globalState.aggregateMessage(GroupAgentId("serviceGroupId2", "agentId"), SummaryDto("first"))
+//    globalState.aggregateMessage(GroupAgentId("serviceGroupId", "agentId"), SummaryDto("first"))
+    globalState.aggregateMessage("serviceGroupId2", mapOf("agentId2" to SummaryDto("second")))
+    globalState.aggregateMessage("serviceGroupId", mapOf("agentId" to SummaryDto("kek")))
+    val res = globalState.aggregateMessage("serviceGroupId2", mapOf("agentId" to SummaryDto("first")))
     println(res)
+    println(globalState._summaryStorage)
 }
-
-typealias GroupAgentId = Pair<String, String>
 
 val globalState = GlobalState()
 
 //TODO remove GlobalState after solving the bug: https://github.com/Kotlin/kotlinx.atomicfu/issues/118
 class GlobalState {
-    private val summaryStorage = atomic(persistentHashMapOf<GroupAgentId, SummaryDto>())
+    val _summaryStorage = atomic(persistentHashMapOf<String, AgentSummary>())
 
     fun aggregateMessage(
-        key: GroupAgentId,
-        summaryDto: SummaryDto
-    ): Collection<SummaryDto> {
-        val storage = summaryStorage.updateAndGet { it.put(key, summaryDto) }
-        return storage
-            .filter { it.key.first == key.first }
-            .values
+        serviceGroup: String,
+        updatedAgentSummary: AgentSummary
+    ): Collection<SummaryDto>? {
+        val storage = _summaryStorage.updateAndGet {
+            val agentSummary: AgentSummary = it[serviceGroup] ?: emptyMap()
+            val newAgentSummary: AgentSummary = agentSummary.plus(updatedAgentSummary)
+            it.put(serviceGroup, newAgentSummary)
+        }
+        return storage[serviceGroup]?.values
+//            .filter { it.key.first == key.first }
+//            .values
     }
 }
 
