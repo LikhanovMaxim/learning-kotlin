@@ -27,7 +27,7 @@ fun main() {
     println(smthBoolean("asd"))
     println(smthBoolean(null))
 
-
+//some changes
 
 
     val orderPersistent = OrderPersistent()
