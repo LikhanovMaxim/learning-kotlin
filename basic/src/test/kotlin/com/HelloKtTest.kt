@@ -15,7 +15,7 @@ class HelloKtTest {
     }
     @Test
     fun `third test`() {
-        assertTrue(2 == 2)
+        assertTrue(3 == 2)
     }
 
 }
