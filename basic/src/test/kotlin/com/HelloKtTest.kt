@@ -9,5 +9,13 @@ class HelloKtTest {
     fun `first test`() {
         assertEquals(2, 2)
     }
+    @Test
+    fun `second test`() {
+        assertEquals(3, 2)
+    }
+    @Test
+    fun `third test`() {
+        assertTrue(2 == 2)
+    }
 
 }
