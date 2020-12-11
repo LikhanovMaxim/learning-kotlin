@@ -12,7 +12,7 @@ fun main() {
     globalState.aggregateMessage("serviceGroupId", mapOf("agentId" to SummaryDto("kek")))
     val res = globalState.aggregateMessage("serviceGroupId2", mapOf("agentId" to SummaryDto("first")))
     println(res)
-    println(globalState._summaryStorage)
+//    println(globalState._summaryStorage)
 }
 
 val globalState = GlobalState()

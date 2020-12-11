@@ -1,8 +1,7 @@
-This is a simple jetty application with drill agent(https://github.com/Drill4J).
+This repo for learning kotlin
 
-## Stack technologies
-- Kotlin
-- jetty server
-## Application url
-- http://localhost:8078/ *
-
+Modules:
+- atomic 
+- basic kotlin with unit tests
+- ktor - todo
+- serialization 

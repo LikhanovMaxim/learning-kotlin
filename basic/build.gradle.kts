@@ -18,4 +18,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.jetbrains.kotlinx:atomicfu")
 }
-
+tasks {
+    test {
+        useJUnitPlatform()
+    }
+}
