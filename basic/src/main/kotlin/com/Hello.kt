@@ -3,7 +3,7 @@ package com
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-data class Product (
+data class Product(
     val name: String,
     val price: Int
 )
@@ -22,13 +22,9 @@ data class OrderPersistent(
 )
 
 
-
 fun main() {
     println(smthBoolean("asd"))
     println(smthBoolean(null))
-
-//some changes
-
 
     val orderPersistent = OrderPersistent()
 //    orderPersistent.products = orderPersistent.products.plus(Product("dsa", 123))
@@ -44,8 +40,8 @@ fun main() {
 }
 
 fun syntaxRun() {
-    val b : String? =null
-    val a : String? ="asdansf"
+    val b: String? = null
+    val a: String? = "asdansf"
 
     b?.run {
         println(b)
@@ -53,14 +49,14 @@ fun syntaxRun() {
     a?.run {
         println(a)
     }
-    var p : Product? = Product("asd", 23)
+    var p: Product? = Product("asd", 23)
     p = p?.run {
         copy(price = 777)
     }
     println(p)
 }
 
-private fun smthBoolean(string: String?) : Boolean {
+private fun smthBoolean(string: String?): Boolean {
     val b = string == null
     return b.also {
 
@@ -68,7 +64,7 @@ private fun smthBoolean(string: String?) : Boolean {
 }
 
 private fun orderMutable() {
-    val orderMutable: OrderMutable = OrderMutable()
+    val orderMutable = OrderMutable()
     orderMutable.products.add(Product("ads", 23))
     orderMutable.products.add(Product("second", 23))
 
@@ -91,9 +87,9 @@ private fun syntaxTernary() {
 }
 
 private fun smth(b: Int = 2): String? {
-    if(b==2)
+    if (b == 2)
         return "astfsdfa"
-    if (b==3)
+    if (b == 3)
         return null
     return ""
 }
