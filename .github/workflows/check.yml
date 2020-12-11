@@ -8,10 +8,10 @@ on:
       - 'develop'
       - 'master'
       - 'release/*'
-    paths:
-      - '**/src/**'
-      - '**.gradle.kts'
-      - 'gradle.properties'
+#    paths:
+#      - '**/src/**'
+#      - '**.gradle.kts'
+#      - 'gradle.properties'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -34,7 +34,9 @@ jobs:
         with:
           java-version: 11
 #          TODO why 11?
-      - uses: eskatos/gradle-command-action@v1
-        with:
-          arguments: check
+#      - uses: eskatos/gradle-command-action@v1
+#        with:
+#          arguments: check
+      - name: Run a one-line script
+        run: echo Hello, world!
 #          arguments: -s check
