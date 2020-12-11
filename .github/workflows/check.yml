@@ -17,7 +17,7 @@ on:
 jobs:
   check:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     #    TODO ubuntu
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -36,15 +36,8 @@ jobs:
         with:
           java-version: 11
       #          TODO why 11?
-      - uses: testspace-com/setup-testspace@v1
-        with:
-           domain: ${{ github.repository_owner }}
-      - name: Push result to Testspace server
-        run: |
-          testspace results.xml
-        if: always()
-
       - uses: eskatos/gradle-command-action@v1
+        continue-on-error: true
         with:
           arguments: check
       #          arguments: -s check # for stacktrace
