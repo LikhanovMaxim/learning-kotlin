@@ -1,7 +1,6 @@
 package com
 
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.*
 
 data class Product(
     val name: String,
@@ -22,7 +21,32 @@ data class OrderPersistent(
 )
 
 
+val lazyValue: String by lazy {
+    println("computed!")
+    "Hello"
+}
+
+fun test1(test: String?) = test?.let { println(it) }
+fun test2(test: String?) {
+    test?.let { println(it) }
+}
+
 fun main() {
+    println(test1("ads"))
+    println(test2("ads"))
+
+    val a1: Any = 123L
+    val a2: Any = 55L
+    val c = a1 as Long - a2 as Long
+    println("c=$c")
+
+    val test: String? = "tesfddg"
+    val takeIf: String? = test?.takeIf { it !in listOf(test) }
+    val a = ads(takeIf)
+    println(a)
+    println("lazy:")
+    println(lazyValue)
+    println(lazyValue)
     println(smthBoolean("asd"))
     println(smthBoolean(null))
 
@@ -38,6 +62,15 @@ fun main() {
 
     syntaxRun()
 }
+
+private fun ads(takeIf: String?) = if (takeIf == null) {
+    println("asd")
+} else println("ads")
+//    takeIf.let {
+//        println("not in let $it")
+//    } ?: {
+//        println("else in $")
+//    }
 
 fun syntaxRun() {
     val b: String? = null
