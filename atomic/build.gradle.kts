@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     id("kotlinx-atomicfu")
+    id("com.github.johnrengelman.shadow")
     application
 }
 
@@ -27,3 +28,15 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
+val runtimeJar by tasks.registering(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar::class) {
+    mergeServiceFiles()
+    isZip64 = true
+    archiveFileName.set("drillRuntime.jar")
+//    val main by kotlin.jvm().compilations
+//    from(
+//        provider { main.output },
+//        provider { main.runtimeDependencyFiles }
+//    )
+    manifest
+//    relocate("kotlin", "kruntime")
+}
