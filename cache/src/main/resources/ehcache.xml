@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://www.ehcache.org/ehcache.xsd">
+    <!--       first example-->
+    <cache name="squareCache"
+           maxElementsInMemory="100"
+           overflowToDisk="false"
+           timeToLiveSeconds="10"
+           timeToIdleSeconds="0"
+           memoryStoreEvictionPolicy="LFU">
+        <cacheEventListenerFactory class="com.example.ehcache.common.log.CacheFactory"/>
+    </cache>
+</ehcache>
