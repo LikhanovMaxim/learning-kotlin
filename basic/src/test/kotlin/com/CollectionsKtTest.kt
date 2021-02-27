@@ -7,12 +7,31 @@ import kotlin.test.*
 class CollectionsKtTest {
 
     @Test
+    fun `change collection`() {
+
+    }
+
+    @Test
+    fun `change orderMutable`() {
+        //another cases:
+        val orderMutable = OrderMutable()
+        orderMutable.products.add(Product("ads", 23))
+        orderMutable.products.add(Product("second", 23))
+
+        println(orderMutable.products)
+    }
+
+
+    @Test
     fun `another cases`() {
         val orderPersistent = OrderPersistent()
-//    orderPersistent.products = orderPersistent.products.plus(Product("dsa", 123))
+        assertEquals(2, orderPersistent.products.size)
+        val add = orderPersistent.products.add(Product("dsa", 123))
 //    val products : ImmutableList<Product> = persistentListOf(Product("dsa", 123), Product("first", 1234))
 //    orderPersistent.products = products
         println(orderPersistent.products)
+        assertEquals(2, orderPersistent.products.size)
+        assertEquals(3, add.size)
 //    orderMutable()
     }
 
@@ -47,8 +66,6 @@ class CollectionsKtTest {
         }.mapValues { (_, values) ->
             values.map { it.summary.duration }.sum()
         }
-        print("sum $sum $sum2 $sum3 $groupBy")
-
-
+        println("sum $sum $sum2 $sum3 $groupBy")
     }
 }

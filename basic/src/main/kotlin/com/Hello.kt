@@ -1,7 +1,11 @@
 package com
 
+import kotlin.time.*
+
 fun main() {
+    val a = TimeSource.Monotonic.markNow();
     println("hello")
+    println(a.elapsedNow())
 }
 
 //lazy:
@@ -15,14 +19,14 @@ fun test2(test: String?) {
     test?.let { println(it) }
 }
 
-fun blockTakeIf(takeIf: String?) = if (takeIf == null) {
-    println("asd")
-} else println("adsdsa")
-//    takeIf.let {
-//        println("not in let $it")
-//    } ?: {
-//        println("else in $")
-//    }
+fun takeIfCheckSize(input: String): String {
+    return input.takeIf { it.length < 10 } ?: "too long string"
+}
+
+fun takeUnlessCheckSize(input: String): String {
+        return input.takeUnless { it.length < 10 } ?: "too short string"
+//    return input.takeUnless { it.length >= 10 } ?: "too long string"
+}
 
 fun syntaxRun() {
     val b: String? = null
@@ -71,3 +75,14 @@ fun smth(b: Int = 2): String? {
     return ""
 }
 
+fun changeParamToValue(destination: String): String {
+    val data = mapOf("scopeId" to "123", "testId" to "77")
+    val res2 = destination
+        .replace(Regex("\\{[A-Za-z]*}"))
+        {
+            val value = it.value.removePrefix("{").removeSuffix("}")
+            println(value)
+            data[value] ?: ""
+        }
+    return res2
+}
