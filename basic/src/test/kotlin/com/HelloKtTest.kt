@@ -4,6 +4,33 @@ import kotlin.test.*
 
 class HelloKtTest {
     //todo add asserts
+
+    @Test
+    fun `transform functions `() {
+        val colors = listOf("red", "brown", "grey")
+        val animals = listOf("fox", "bear", "wolf")
+
+        val transform: (a: String, b: String) -> String = { color, animal -> "The ${animal.capitalize()} is $color" }
+        val message = colors.zip(animals, transform)
+        val message2 = colors.zip(animals) { color, animal -> "The ${animal.capitalize()} is $color" }
+        println(message)
+        println(message2)
+    }
+
+    @Test
+    fun `replace string`() {
+        val destination = "/scope/{scopeId}/test"
+        val res2 = changeParamToValue(destination)
+        assertEquals("/scope/123/test", res2)
+    }
+
+    @Test
+    fun `replace string - two value`() {
+        val destination = "/scope/{scopeId}/test/{testId}"
+        val res2 = changeParamToValue(destination)
+        assertEquals("/scope/123/test/77", res2)
+    }
+
     @Test
     fun `lazy cases`() {
         println(test1("ads"))
@@ -16,10 +43,20 @@ class HelloKtTest {
 
     @Test
     fun `takeIf block`() {
-        val test: String? = "tesfddg"
-        val takeIf: String? = test?.takeIf { it !in listOf(test) }
-        val a = blockTakeIf(takeIf)
-        println(a)
+        val test = "short"
+        val testLong = "short5555555555555555555555555"
+        assertEquals(test, takeIfCheckSize(test))
+        assertEquals("too long string", takeIfCheckSize(testLong))
+    }
+
+    @Test
+    fun `takeUnless block`() {
+        val test = "short"
+        val testLong = "short5555555555555555555555555"
+//        assertEquals(test, takeUnlessCheckSize(test))
+//        assertEquals("too long string", takeUnlessCheckSize(testLong))
+        assertEquals("too short string", takeUnlessCheckSize(test))
+        assertEquals(testLong, takeUnlessCheckSize(testLong))
     }
 
     @Test
@@ -32,10 +69,12 @@ class HelloKtTest {
         println(smthBoolean("asd"))
         println(smthBoolean(null))
     }
+
     @Test
     fun `syntax ternary`() {
         syntaxTernary()
     }
+
     @Test
     fun `asd `() {
         val str = """
@@ -79,7 +118,7 @@ class HelloKtTest {
     fun String?.asAgentParams(
         lineDelimiter: String = ",",
         removeStartWith: String = "",
-        mapDelimiter: String = "="
+        mapDelimiter: String = "=",
     ): Map<String, String> {
         if (this.isNullOrEmpty()) return mutableMapOf()
         return try {
