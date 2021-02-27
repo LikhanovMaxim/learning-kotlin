@@ -10,30 +10,9 @@ data class Build(
     val data: String
 )
 
-//val lazyValue: String by lazy {
-//    println("computed!")
-//    "Hello"
-//}
-
-fun main() {
-//    println("lazy:")
-//    println(lazyValue)
-//    println(lazyValue)
-
-
-    println("lol")
-
-    val build = Build("1", "0", "dataasdasd")
-
-    val build2 = updateBuild(build) {
-        copy(version = "4444")
-    }
-    println(build2)
-}
-
 val context: Context = Context()
 
-private fun updateBuild(
+ fun updateBuild(
     build: Build,
     updater: Build.() -> Build
 ): Build {

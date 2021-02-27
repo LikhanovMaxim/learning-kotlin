@@ -1,17 +1,43 @@
 package com
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class HelloKtTest {
+    //todo add asserts
     @Test
-    fun `first test`() {
-        assertEquals(2, 2)
+    fun `lazy cases`() {
+        println(test1("ads"))
+        println(test2("ads"))
+
+        println("lazy:")
+        println(lazyValue)
+        println(lazyValue)
     }
 
     @Test
-    fun `asd `(){
+    fun `takeIf block`() {
+        val test: String? = "tesfddg"
+        val takeIf: String? = test?.takeIf { it !in listOf(test) }
+        val a = blockTakeIf(takeIf)
+        println(a)
+    }
+
+    @Test
+    fun `syntax Run`() {
+        syntaxRun()
+    }
+
+    @Test
+    fun `boolean cases`() {
+        println(smthBoolean("asd"))
+        println(smthBoolean(null))
+    }
+    @Test
+    fun `syntax ternary`() {
+        syntaxTernary()
+    }
+    @Test
+    fun `asd `() {
         val str = """
         str=b,str2=c
     """.trimIndent()
@@ -22,7 +48,7 @@ class HelloKtTest {
     }
 
     @Test
-    fun `sda asd`(){
+    fun `sda asd`() {
         val str = """
             drillInstallationDir=myVersion/
             adminAddress=localhost:8090
@@ -49,6 +75,7 @@ class HelloKtTest {
             throw IllegalArgumentException("wrong agent parameters: $this")
         }
     }
+
     fun String?.asAgentParams(
         lineDelimiter: String = ",",
         removeStartWith: String = "",
