@@ -11,6 +11,7 @@ import io.ktor.util.pipeline.*
 import io.ktor.utils.io.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
+import kotlin.reflect.jvm.jvmErasure
 
 @Serializable
 sealed class Message {
@@ -185,7 +186,7 @@ private object EmptyContentConverter : ContentConverter {
         val request = context.subject
         val readChannel = request.value as? ByteReadChannel
         val discarded = readChannel?.discard()
-        return Unit.takeIf { discarded == 0L && request.type == it::class }
+        return Unit.takeIf { discarded == 0L && request.typeInfo.jvmErasure == it::class }
     }
 
     override suspend fun convertForSend(
