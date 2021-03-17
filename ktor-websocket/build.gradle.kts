@@ -22,13 +22,22 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-serialization:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.1")
-}
+    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("io.github.microutils:kotlin-logging:2.0.6")
 
+    testImplementation(kotlin("test-junit5"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.jetbrains.kotlinx:atomicfu")
+}
+//todo create docker image
 tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>{
         kotlinOptions{
             jvmTarget = "1.8"
         }
+    }
+    test {
+        useJUnitPlatform()
     }
 }
 
