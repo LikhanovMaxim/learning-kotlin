@@ -6,6 +6,14 @@ class HelloKtTest {
     //todo add asserts
 
     @Test
+    fun `check null`() {
+        val finalizedTests: String? = "344012jk"
+        val typedTest = "dddd"
+        finalizedTests?.contains(typedTest).let { println("lol") }
+        println("kek")
+    }
+
+    @Test
     fun `transform functions `() {
         val colors = listOf("red", "brown", "grey")
         val animals = listOf("fox", "bear", "wolf")
