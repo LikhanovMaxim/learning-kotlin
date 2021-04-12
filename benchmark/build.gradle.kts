@@ -3,10 +3,6 @@
 import kotlinx.benchmark.gradle.*
 import org.jetbrains.kotlin.allopen.gradle.*
 
-repositories {
-    mavenCentral()
-}
-
 plugins {
     kotlin("jvm")
     kotlin("plugin.allopen") version "1.4.0"
@@ -14,16 +10,14 @@ plugins {
     application
 }
 
-
-
 application {
     mainClassName = "com.HelloKt" //TODO package
 }
 
-sourceSets.all {
-    java.setSrcDirs(listOf("$name/src"))
-    resources.setSrcDirs(listOf("$name/resources"))
-}
+//sourceSets.all {
+//    java.setSrcDirs(listOf("$name/src"))
+//    resources.setSrcDirs(listOf("$name/resources"))
+//}
 
 
 configure<AllOpenExtension> {
@@ -59,11 +53,19 @@ benchmark {
     configurations {
         named("main") {
             iterationTime = 5
-            iterationTimeUnit = "sec"
+            iterationTimeUnit = "ms"
         }
+//        named("mySmoke"){
+//            iterationTime = 5
+//            iterationTimeUnit = "ms"
+//        }
     }
     targets {
         register("main") {
+            this as JvmBenchmarkTarget
+            jmhVersion = "1.21"
+        }
+        register("test") {
             this as JvmBenchmarkTarget
             jmhVersion = "1.21"
         }

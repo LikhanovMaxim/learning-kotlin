@@ -1,9 +1,16 @@
 package com
 
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class HelloKtTest {
     //todo add asserts
+
+    @Test
+    fun `code  from another module`() {
+        val a = SuperUtil()
+        assertEquals(100, a.sqrt2(10))
+    }
 
     @Test
     fun `check null`() {
