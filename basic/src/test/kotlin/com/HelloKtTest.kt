@@ -1,10 +1,69 @@
 package com
 
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 class HelloKtTest {
     //todo add asserts
+
+    @Test
+    fun `inherited classes`() {
+        val smth: WorkProbes = SimpleProbesImpl(10)
+        smth.set(1, true)
+
+//        val a = BitSet() //as WorkProbes
+//        val bitSet = WorkProbesImpl(a)
+//        bitSet.length()
+    }
+
+
+    @Test
+    fun `delegation examples`() {
+        val b = BaseImpl(10)
+        Derived(b).print()
+        val derived22 = Derived22(b)
+        derived22.lol()
+        derived22.print()9
+    }
+
+
+    private fun BitSet.toBooleanArray(): BooleanArray {
+        return BooleanArray(length()) {
+            get(it)
+        }
+    }
+
+    @Test
+    fun `check bitSet`() {
+        val bitSet = BitSet(5)
+        bitSet.set(0, true)
+        bitSet.set(2)
+        bitSet.set(4)
+        println(bitSet)
+        val booleans = bitSet.toBooleanArray()
+        println(booleans)
+//        assertEquals(3, bitSet.size())
+        assertEquals(5, booleans.size)
+    }
+
+    @Test
+    fun `check bitSet length`() {
+        val bitSet = BitSet(4)
+        bitSet.set(0, true)
+        bitSet.set(1)
+        bitSet.set(3)
+        assertEquals(4, bitSet.length())
+    }
+
+
+    @Test
+    fun `check bitSet size`() {
+        val bitSet = BitSet(4)
+        val bitSet2 = BitSet(1_000_000)
+        assertNotEquals(bitSet.size(), bitSet2.size())
+    }
 
     @Test
     fun `code  from another module`() {

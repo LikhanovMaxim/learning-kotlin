@@ -1,11 +1,14 @@
 package com
 
+import jdk.nashorn.internal.runtime.regexp.joni.Regex
 import kotlin.time.*
 
 fun main() {
     val a = TimeSource.Monotonic.markNow();
     println("hello")
     println(a.elapsedNow())
+
+    Thread.sleep(10_000)
 }
 
 //lazy:
@@ -24,7 +27,7 @@ fun takeIfCheckSize(input: String): String {
 }
 
 fun takeUnlessCheckSize(input: String): String {
-        return input.takeUnless { it.length < 10 } ?: "too short string"
+    return input.takeUnless { it.length < 10 } ?: "too short string"
 //    return input.takeUnless { it.length >= 10 } ?: "too long string"
 }
 
@@ -38,7 +41,7 @@ fun syntaxRun() {
     a?.run {
         println(a)
     }
-    var p: Product? = Product("asd", 23)
+    var p: Product? = com.Product("asd", 23)
     p = p?.run {
         copy(price = 777)
     }
@@ -77,12 +80,13 @@ fun smth(b: Int = 2): String? {
 
 fun changeParamToValue(destination: String): String {
     val data = mapOf("scopeId" to "123", "testId" to "77")
-    val res2 = destination
-        .replace(Regex("\\{[A-Za-z]*}"))
-        {
-            val value = it.value.removePrefix("{").removeSuffix("}")
-            println(value)
-            data[value] ?: ""
-        }
+    val res2 = destination + data.keys.first()
+//        destination
+//        .replace(Regex("\\{[A-Za-z]*}"))
+//        {
+//            val value = it.value.removePrefix("{").removeSuffix("}")
+//            println(value)
+//            data[value] ?: ""
+//        }
     return res2
 }

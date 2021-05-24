@@ -1,29 +1,57 @@
 package com
 
 import kotlinx.coroutines.*
-import kotlin.system.*
+import kotlin.system.measureTimeMillis
 
 /**
  * GlobalScope
- * async
- * launch
+ * async like Callable in Java
+ * launch like Runnable in Java
  * runBlocking
  */
 fun main() {
+    println("starting...")
+    val scope = MainScope()
+    scope.launch {
+        loadConfigurationAndData()
+    }
+//    thirdExampleRunBlocking()
+
+    println("hi from main")
+//    firstExample()
+
+//    secondExample()
+}
+
+private fun thirdExampleRunBlocking() {
     runBlocking<Unit> {
         val time = measureTimeMillis {
             val one = async { doSomethingUsefulUnit() }
             val two = async { doSomethingUsefulTwo() }
+//            val one =  doSomethingUsefulUnit()
+//            val two =  doSomethingUsefulTwo()
+//            println("The answer is ${one} ${two}")
             println("b = $b")
             println("The answer is ${one.await()} ${two.await()}")
             println("after await b = $b")
         }
         println("Completed in $time ms")
     }
-//    firstExample()
+}
 
-//    secondExample()
+// concurrently load configuration and data
+suspend fun loadConfigurationAndData() {
+    coroutineScope {
+        launch { loadConfiguration() }
+        launch { doSomethingUsefulUnit() }
+    }
+}
 
+suspend fun loadConfiguration() {
+    println("doSomethingUsefulTwo $b")
+    delay(1000L) // pretend we are doing something useful here, too
+//    val config = fetchConfigFromServer() // network request
+//    updateConfiguration(config)
 }
 
 suspend fun doSomethingUsefulTwo(): Int {
