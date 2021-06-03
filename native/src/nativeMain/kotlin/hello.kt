@@ -1,10 +1,18 @@
-import com.*
+//import platform.windows.boolean
+import com.asAgentParams
+import com.asAgentParamsProperties
+import com.readFile
 import kotlinx.cinterop.*
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-import kotlinx.serialization.properties.*
-import net.mamoe.yamlkt.*
-import platform.posix.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.properties.Properties
+import net.mamoe.yamlkt.Yaml
+import platform.posix.getenv
+import platform.windows.booleanVar
+import kotlin.random.Random
 
 
 const val DIR = "E:/projects/github/learning-kotlin_update/native/src/nativeMain/resources/"
@@ -49,6 +57,71 @@ fun main() {
     val asAgentParams = properties.asAgentParams("\n", "#")
     println(asAgentParams)
 //    serializePropertiesFile()
+}
+
+fun setBooleanNative(probeCount: Int = 1000 * 1024): BooleanArray {
+    val bool = BooleanArray(probeCount)
+    (0 until probeCount / 2).map {
+        bool[Random.nextInt(probeCount)] = true
+    }
+    return bool
+}
+
+class MyStructureInt(size: Int) {
+    private val bytePtr = nativeHeap.allocArray<IntVar>(size)
+    fun setStub(index: Int, value: Int) {
+        bytePtr[index] = value
+    }
+
+    fun get(index: Int) = bytePtr[index]
+
+    fun close() {
+        nativeHeap.free(bytePtr)
+    }
+}
+
+class MyStructureBoolean(size: Int) {
+//        private val bytePtr: CPointer<BooleanVarOf<Boolean>> = nativeHeap.allocArray<BooleanVar>(size)
+    private lateinit var bytePtr: CPointer<BooleanVarOf<Boolean>>// = nativeHeap.allocArray<BooleanVar>(0)
+    fun init(size: Int) {
+        bytePtr = nativeHeap.allocArray<BooleanVar>(size)
+    }
+
+    fun setStub(index: Int) {
+        bytePtr[index].value = true
+    }
+
+    fun get(index: Int): BooleanVar = bytePtr[index]
+    fun close() {
+        nativeHeap.free(bytePtr)
+    }
+}
+
+
+fun setBooleanNative2(probeCount: Int = 1000 * 1024): BooleanArray {
+//    val bool: boolean
+//    bool = true.toByte().toboolean()
+    val bool2: booleanVar
+//    bool2.rawPtr
+//    bool2.
+//    val bool222: ArrayList<boolean>
+//    val bool244: Array<Boolean> = Array<Bo>(probeCount)
+//
+
+//    (0 until probeCount / 2).map {
+//        bool222[Random.nextInt(probeCount)] = true
+//    }
+//    cValuesOf(true, false, true)
+    val cValuesOf = cValuesOf(1, 2, 3)
+    return BooleanArray(1)
+}
+
+fun setBitSetNative(probeCount: Int = 1000 * 1024): BitSet {
+    val bool = BitSet(probeCount)
+    (0 until probeCount / 2).map {
+        bool.set(Random.nextInt(probeCount))
+    }
+    return bool
 }
 
 private fun printSystemVariable(varName: String = "JAVA_HOME") {
@@ -127,3 +200,34 @@ fun calcBv(versionParam: String?): String? = runCatching {
     }
 }.getOrNull()
 
+actual class MyExpect {
+    actual fun transform(smth: String) {
+        println(smth)
+    }
+}
+
+
+//class MyExpect {
+//    @CName("Java_MyExpect_transform")
+//    fun transform(smth: String) {
+//        println(smth)
+//    }
+//}
+
+
+//@Suppress("UNUSED_PARAMETER")
+//@CName("Java_org_jonnyzzz_jni_java_NativeHost_callInt")
+//fun callInt(env: CPointer<JNIEnvVar>, clazz: jclass, it: jint): jint {
+//    initRuntimeIfNeeded()
+//    Platform.isMemoryLeakCheckerActive = false
+//
+//    println("Native function is executed with: $it")
+//    return it + 1
+//}
+//
+//@CName("Java_com_example_hellojni_HelloJni_stringFromJNI")
+//fun stringFromJNI(env: CPointer<JNIEnvVar>, thiz: jobject): jstring {
+//    memScoped {
+//        return env.pointed.pointed!!.NewStringUTF!!.invoke(env, "This is from Kotlin Native!!".cstr.ptr)!!
+//    }
+//}

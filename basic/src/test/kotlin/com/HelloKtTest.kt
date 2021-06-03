@@ -25,7 +25,7 @@ class HelloKtTest {
         Derived(b).print()
         val derived22 = Derived22(b)
         derived22.lol()
-        derived22.print()9
+        derived22.print()
     }
 
 

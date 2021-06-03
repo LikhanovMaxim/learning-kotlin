@@ -80,7 +80,7 @@ class HelloKtTest {
     }
 
     @Test
-    fun `should deserialize `(){
+    fun `should deserialize `() {
 
     }
 
@@ -102,7 +102,6 @@ class HelloKtTest {
         println(map1.plus(map2))
         println(map1.mapValues { it.value.replace(":", ",") })
     }
-
 
 
     @Test
@@ -189,12 +188,11 @@ class HelloKtTest {
     }
 
 
-
     //
 
 
     @Test
-    fun `should parse version`(){
+    fun `should parse version`() {
         val buildVersion = "gs-spring-boot-docker-0.1.0"
         val calcBv = calcBv("/deployments/tmp/src/$buildVersion.jar")
         println(calcBv)
@@ -202,7 +200,7 @@ class HelloKtTest {
     }
 
     @Test
-    fun `should parse version by env`(){
+    fun `should parse version by env`() {
         val calcBv = calv()
         println("calcBv=$calcBv")
     }

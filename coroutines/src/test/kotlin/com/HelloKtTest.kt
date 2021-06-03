@@ -8,18 +8,34 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlin.time.measureTimedValue
 
+internal val availableProcessors: Int = Runtime.getRuntime().availableProcessors()
+
+internal val allAvailableProcessDispatcher: ExecutorCoroutineDispatcher =
+    Executors.newFixedThreadPool(availableProcessors).asCoroutineDispatcher()
+
 class HelloKtTest {
     @Test
     fun asd() {
         assertTrue { true }
 //        val list = listOf("asd", "sgsdf", "1111")
-        val list = (0 until 10).map { "$it ${Random.nextInt()}" }
+        val list = (0 until 1_000).map { "$it ${Random.nextInt()}" }
+
+        trackTime("list to smth") {
+            list.toSmth()
+        }
+
+        trackTime("list to smth2") {
+            PluginWorker.launch {
+                list.toSmth2()
+            }
+        }
+
 
         PluginWorker.launch {
-//            list.forEach {
-//                println(it)
-//                prinMy(it)
-//            }
+            list.forEach {
+                println(it)
+                prinMy(it)
+            }
             trackTime("run all") {
                 list.forEach {
 //                    println(it)
@@ -60,9 +76,43 @@ class HelloKtTest {
     )
 }
 
+private fun List<String>.toSmth(): List<String> {
+    return runBlocking(allAvailableProcessDispatcher) {
+        val subCollectionSize = (size / availableProcessors).takeIf { it > 0 } ?: 1
+        println("subCollectionSize= $subCollectionSize")
+        chunked(subCollectionSize).map { subList: List<String> ->
+            async {
+                delay(500)//some calculation
+                subList.reduce { a: String, b: String -> (a.length + b.length).toString() }
+            }
+        }.map { it.await() }.apply {
+            println("res=$this")
+        }
+    }
+}
+
+private suspend fun List<String>.toSmth2(): List<String> {
+    val a = System.currentTimeMillis()
+    val subCollectionSize = (size / availableProcessors).takeIf { it > 0 } ?: 1
+    println("subCollectionSize= $subCollectionSize")
+    return chunked(subCollectionSize).map { subList: List<String> ->
+        PluginWorker.async {
+            delay(500)//some calculation
+            subList.reduce { a: String, b: String -> (a.length + b.length).toString() }
+        }
+    }.map { it.await() }.apply {
+        println("${System.currentTimeMillis() - a}res=$this")
+    }
+}
+
+
 internal object PluginWorker : CoroutineScope {
+    init {
+        println("PluginWorker with size pool = $availableProcessors ")
+    }
+
     override val coroutineContext: CoroutineContext = run {
-        Executors.newFixedThreadPool(4).asCoroutineDispatcher() + SupervisorJob()
+        Executors.newFixedThreadPool(availableProcessors).asCoroutineDispatcher() + SupervisorJob()
     }
 }
 

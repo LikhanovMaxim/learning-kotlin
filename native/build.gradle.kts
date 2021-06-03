@@ -21,6 +21,17 @@ kotlin {
             binaries {
                 executable()
             }
+//            compilations["main"].cinterops.create("jni") {
+//                // JDK is required here, JRE is not enough
+//                val javaHome = File(System.getenv("JAVA_HOME") ?: System.getProperty("java.home"))
+//                packageName = "org.jonnyzzz.jni"
+//                includeDirs(
+//                    Callable { File(javaHome, "include") },
+//                    Callable { File(javaHome, "include/darwin") },
+//                    Callable { File(javaHome, "include/linux") },
+//                    Callable { File(javaHome, "include/win32") }
+//                )
+//            }
         }
 //        ,
 //        linuxX64("native") {
@@ -52,18 +63,32 @@ kotlin {
             }
         }
     }
-//    jvm {
-//        val main by compilations
-//        main.defaultSourceSet {
-//            dependencies {
-//                compileOnly(kotlin("stdlib"))
-////                compileOnly("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")
+    jvm {
+        val main by compilations
+        main.defaultSourceSet {
+            dependencies {
+                compileOnly(kotlin("stdlib-jdk8"))
+//                compileOnly("org.jetbrains.kotlinx:atomicfu:$atomicFuVersion")
 //                implementation("io.ktor:ktor-utils-jvm:$ktorUtilVersion")
-////                implementation("com.soywiz.korlibs.klock:klock-jvm:$klockVersion")
-////                implementation("com.epam.drill.kni:runtime-jvm:$kniVersion")
-//            }
-//        }
-//    }
+//                implementation("com.soywiz.korlibs.klock:klock-jvm:$klockVersion")
+//                implementation("com.epam.drill.kni:runtime-jvm:$kniVersion")
+            }
+        }
+    }
+    val run by tasks.creating(JavaExec::class){
+        main = "com.HiKt"
+        group = "applicationMy"
+        dependsOn(jvm().compilations.map { it.compileAllTaskName })
+
+        //todo???
+//        dependsOn(of.forEach {
+//            it.compilations.map { it.compileAllTaskName }
+//        })
+//        dependsOn(of.forEach {
+//            it.binaries.map { it.linkTaskName }
+//        })
+
+    }
 //    crossCompilation {
 //        common {
 //            defaultSourceSet {
