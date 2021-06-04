@@ -14,4 +14,9 @@ actual object WebContainerSource {
 
     actual external fun webAppStarted()
     actual external fun printSmth(index: Int)
+    actual external fun printSmthString(s: String)
+//    actual external fun printBoolean(arrBool: BooleanArray)
+//    actual external fun printByteArr(arrBool: ByteArray): ByteArray
+    actual external fun returnByteArr(): ByteArray
+    actual external fun returnInt(): Int
 }

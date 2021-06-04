@@ -11,9 +11,25 @@ fun main() {
 //    hiFromNative()
 
     WebContainerSource.printSmth(1)
+
+    println(WebContainerSource.returnInt())
+    runCatching {
+        WebContainerSource.printSmthString("eeee")
+    }.onFailure {
+        println(it)
+    }
+
 //    println(concat)
 
+//    val byteArray = ByteArray(3)
+//    WebContainerSource.printByteArr(byteArray)
 
+    runCatching {
+        val returnByteArr = WebContainerSource.returnByteArr()
+        println("decode ${returnByteArr.decodeToString()}")
+    }.onFailure {
+        println(it)
+    }
 
     println("starting time experiments...")
     val arr = BooleanArray(1_000_000)
