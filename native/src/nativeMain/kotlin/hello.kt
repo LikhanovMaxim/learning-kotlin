@@ -12,6 +12,7 @@ import kotlinx.serialization.properties.Properties
 import net.mamoe.yamlkt.Yaml
 import platform.posix.getenv
 import platform.windows.booleanVar
+import kotlin.native.concurrent.freeze
 import kotlin.random.Random
 
 
@@ -67,6 +68,15 @@ fun setBooleanNative(probeCount: Int = 1000 * 1024): BooleanArray {
     return bool
 }
 
+class MyStructureBooleanArr(size: Int) {
+    private val bytePtr = BooleanArray(size)
+    fun set(index: Int) {
+        bytePtr[index] = true
+    }
+
+    fun get(index: Int) = bytePtr[index]
+}
+
 class MyStructureInt(size: Int) {
     private val bytePtr = nativeHeap.allocArray<IntVar>(size)
     fun setStub(index: Int, value: Int) {
@@ -80,11 +90,11 @@ class MyStructureInt(size: Int) {
     }
 }
 
-class MyStructureBoolean(size: Int) {
-//        private val bytePtr: CPointer<BooleanVarOf<Boolean>> = nativeHeap.allocArray<BooleanVar>(size)
+class MyStructureBoolean1(size: Int) {
+    //        private val bytePtr: CPointer<BooleanVarOf<Boolean>> = nativeHeap.allocArray<BooleanVar>(size)
     private lateinit var bytePtr: CPointer<BooleanVarOf<Boolean>>// = nativeHeap.allocArray<BooleanVar>(0)
     fun init(size: Int) {
-        bytePtr = nativeHeap.allocArray<BooleanVar>(size)
+        bytePtr = nativeHeap.allocArray(size)
     }
 
     fun setStub(index: Int) {
@@ -231,3 +241,80 @@ actual class MyExpect {
 //        return env.pointed.pointed!!.NewStringUTF!!.invoke(env, "This is from Kotlin Native!!".cstr.ptr)!!
 //    }
 //}
+
+object MyStructureBoolean {
+    //        private val bytePtr: CPointer<BooleanVarOf<Boolean>> = nativeHeap.allocArray<BooleanVar>(size)
+    //todo threadLocal
+    private lateinit var bytePtr: CPointer<BooleanVarOf<Boolean>>// = nativeHeap.allocArray<BooleanVar>(0)
+
+    //val a = ThreadLocal
+    public fun create(size: Int) {
+        println("creating...")
+        bytePtr.freeze()
+        println("freeze...")
+        bytePtr = nativeHeap.allocArray(size)
+    }
+
+    public fun setStub(index: Int) {
+        println("setting...")
+        bytePtr[index].value.freeze()//.also {
+//            it = true
+//        }
+        println("freeze")
+        bytePtr[index].value = true
+    }
+
+    public fun get(index: Int): Int {
+        val booleanVarOf = bytePtr[index]
+        println("booleanVarOf $index")
+        return booleanVarOf.value.toByte().toInt()
+    }
+
+    public fun close() {
+        nativeHeap.free(bytePtr)
+    }
+
+//    actual fun setArray(array: List<Boolean>, index: Int) {
+//        println("array $index $array")
+//    }
+
+    public fun setting() {
+        println()
+        val length = 1_000_000
+        val probeCount = 250_000
+        val booleans: CPointer<BooleanVarOf<Boolean>> = nativeHeap.allocArray(length)
+        for (i in 0..probeCount) {
+            booleans[i].value = true
+        }
+        nativeHeap.free(booleans)
+//        todo
+//        nativeHeap.free()
+    }
+
+
+}
+
+
+@ThreadLocal
+object Smth {
+    var count: Int = 0
+    fun add() {
+        count++
+    }
+}
+
+
+@ThreadLocal
+object ArrayBoolean {
+    lateinit var booleans: CPointer<BooleanVarOf<Boolean>>// = nativeHeap.allocArray<BooleanVar>(0)
+
+    public fun create(size: Int) {
+        booleans = nativeHeap.allocArray(size)
+    }
+
+    fun set(index: Int) {
+        booleans[index].value = true
+    }
+
+    fun get(index: Int) = booleans[index].value
+}

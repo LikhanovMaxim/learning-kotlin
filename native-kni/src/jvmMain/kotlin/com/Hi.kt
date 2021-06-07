@@ -1,14 +1,69 @@
 package com
 
-import kotlin.random.Random
 import kotlin.time.measureTimedValue
 
-
+const val sizeBoolean = 1_000_000
+const val probeCount = 250_000
 fun main() {
     println("loading the lib...")
     loadNativeLib()
+//    val a = SomeClass()
+//    a.ddd()
+//    webContainerSource()
+//    ArrayBooleanNative.sett(1)
+//    ArrayBooleanNative.sett(2)
+//    println(ArrayBooleanNative.gett(2))
+//    println(ArrayBooleanNative.gett(3))
+    trackTime("setManyTimes native ThreadLocal") {
+        ArrayBooleanNative.createNative(sizeBoolean)
+        (0 until probeCount).map {
+            ArrayBooleanNative.sett(it)
+        }
+    }
+    println("starting time experiments...")
+    trackTime("setManyTimes java BooleanArray") {
+        val arr = BooleanArray(sizeBoolean)
+        arr.setManyTimes(probeCount)
+        arr.setManyTimes(probeCount)
+    }
+    trackTime("setManyTimes pass BooleanArray") {
+        val arr = BooleanArray(10)
+        KotlinPassParams.smth(arr)
+    }
+    nativeBoolean()
+}
 
-//    hiFromNative()
+private fun nativeBoolean() {
+    //    val structure = MyStructureBoolean()
+//    println("setting")
+//    convertFromBoolArrToByteArr()
+
+    trackTime("setManyTimes native BooleanVarOf") {
+        MyStructureBoolean.setting(sizeBoolean, probeCount)
+    }
+    trackTime("setManyTimes native BooleanArray") {
+        MyStructureBoolean.setting22(sizeBoolean, probeCount)
+    }
+//    println("creating...") //todo
+//    MyStructureBoolean.create(10)
+//    println("setStub...")
+//    MyStructureBoolean.setStub(2)
+//    val get = MyStructureBoolean.get(1)
+//    println("structure  $get ${MyStructureBoolean.get(2)}")
+}
+
+//TODO
+private fun convertFromBoolArrToByteArr() {
+    val array = BooleanArray(10)
+    val message: List<Boolean> = array.toList()
+    val byteArray = message.toString().toByteArray()
+    println("$message $byteArray")
+    println("${byteArray.toUByteArray()}")
+    println("$byteArray ")
+}
+
+private fun webContainerSource() {
+    //    hiFromNative()
 
     WebContainerSource.printSmth(1)
 
@@ -30,13 +85,6 @@ fun main() {
     }.onFailure {
         println(it)
     }
-
-    println("starting time experiments...")
-    val arr = BooleanArray(1_000_000)
-    trackTime("setManyTimes") {
-        arr.setManyTimes(250_000)
-    }
-
 }
 
 private fun loadNativeLib() {
@@ -59,7 +107,7 @@ private fun hiFromNative() {
 
 fun BooleanArray.setManyTimes(probeCount: Int) {
     (0 until probeCount).map {
-        set(Random.nextInt(size - 1), true)
+        set(it, true)
     }
 }
 
