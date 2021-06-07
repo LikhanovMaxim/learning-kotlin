@@ -15,9 +15,9 @@ dependencies {
 
     //provided by drill runtime
 //    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:$serializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:$serializationVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
     //provided by admin
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm")

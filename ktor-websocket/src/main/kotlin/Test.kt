@@ -8,14 +8,10 @@ import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.websocket.*
-import kotlinx.serialization.*
-import mu.*
-//todo add logging
-/**
-SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-SLF4J: Defaulting to no-operation (NOP) logger implementation
-SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
- */
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
+import mu.KotlinLogging
 
 @Serializable
 data class ExampleJson(
@@ -62,7 +58,7 @@ fun main() {
                 val message = call.parameters["message"]
                 val messageToWs = "fasfas it asd $message"
                 wsSessions.forEach {
-                    logger.info {"session ${it.hashCode()} $message"}
+                    logger.info { "session ${it.hashCode()} $message" }
                     it.send("some messages")
                     it.outgoing.send(Frame.Text(messageToWs))
                 }
@@ -71,6 +67,15 @@ fun main() {
             get("/flush-sessions") {
                 wsSessions.clear()
                 call.respond(HttpStatusCode.OK, "sessions size ${wsSessions.size}")
+            }
+            get("/blocking") {
+                runBlocking {
+                    wsSessions.clear()
+                    logger.info { "delay..." }
+                    delay(10_000)
+                    logger.info { "finish delay." }
+                    call.respond(HttpStatusCode.OK, "sessions size ${wsSessions.size}")
+                }
             }
             webSocket("/ws/my-websocket") {
 //                val wsSession = WebSocketServerSession
