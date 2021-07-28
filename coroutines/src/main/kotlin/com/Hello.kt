@@ -26,8 +26,8 @@ fun main() {
 private fun thirdExampleRunBlocking() {
     runBlocking<Unit> {
         val time = measureTimeMillis {
-            val one = async { doSomethingUsefulUnit() }
-            val two = async { doSomethingUsefulTwo() }
+            val one: Deferred<Unit> = async { doSomethingUsefulUnit() }
+            val two: Deferred<Int> = async { doSomethingUsefulTwo() }
 //            val one =  doSomethingUsefulUnit()
 //            val two =  doSomethingUsefulTwo()
 //            println("The answer is ${one} ${two}")

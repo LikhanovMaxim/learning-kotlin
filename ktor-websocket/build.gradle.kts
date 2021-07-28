@@ -34,10 +34,25 @@ tasks {
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>{
         kotlinOptions{
             jvmTarget = "1.8"
+            freeCompilerArgs = listOf(
+//                "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi",
+//                "-Xuse-experimental=kotlinx.serialization.InternalSerializationApi",
+//                "-Xuse-experimental=io.ktor.locations.KtorExperimentalLocationsAPI",
+//                "-Xuse-experimental=io.ktor.util.KtorExperimentalAPI",
+                "-Xuse-experimental=io.ktor.util.InternalAPI",
+//                "-Xuse-experimental=kotlin.Experimental",
+//                "-Xuse-experimental=kotlin.ExperimentalStdlibApi",
+                "-Xuse-experimental=kotlin.time.ExperimentalTime"
+//                "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
+//                "-Xuse-experimental=kotlinx.serialization.ImplicitReflectionSerializer"
+            )
         }
     }
     test {
         useJUnitPlatform()
+    }
+    (run) {
+        jvmArgs = listOf("-Xms64m", "-Xmx100m")
     }
 }
 
