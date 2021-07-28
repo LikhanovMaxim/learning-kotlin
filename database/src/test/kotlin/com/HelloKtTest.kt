@@ -51,10 +51,10 @@ class HelloKtTest {
     }
 
     @Serializable
-    data class Epta(val sss: String) : java.io.Serializable
+    data class Opa(val sss: String) : java.io.Serializable
 
     @Serializable
-    data class CoverDataPart(val sessionId: String, val data: List<Epta>) : java.io.Serializable
+    data class CoverDataPart(val sessionId: String, val data: List<Opa>) : java.io.Serializable
 
     //    @OptIn(InternalSerializationApi::class)
     val dbMap = DBMaker
@@ -71,7 +71,7 @@ class HelloKtTest {
                     .keySerializer(Serializer.STRING)
                     .valueSerializer(Serializer.JAVA)
                     .createOrOpen()
-                val coverDataPart = CoverDataPart("sadsd", listOf(Epta("ads")))
+                val coverDataPart = CoverDataPart("sadsd", listOf(Opa("ads")))
                 val coverDataPart2 = CoverDataPart("2222", listOf())
 //        val aaa: KSerializer<CoverDataPart> = CoverDataPart.serializer()
 //        val serializer: KSerializer<CoverDataPart> = CoverDataPart::class.serializer()
@@ -110,7 +110,7 @@ class HelloKtTest {
 
     private suspend fun setttt(map: HTreeMap<String, Any>) {
         for (i in 3..500) {
-            map["key$i"] = CoverDataPart("session$i", listOf(Epta("ads")))
+            map["key$i"] = CoverDataPart("session$i", listOf(Opa("ads")))
             println("set $i successfully")
             delay(1L)
         }
@@ -123,7 +123,7 @@ class HelloKtTest {
 
     @Test
     fun `mapdb file set object`() {
-        val coverDataPart = CoverDataPart("sadsd", listOf(Epta("ads")))
+        val coverDataPart = CoverDataPart("sadsd", listOf(Opa("ads")))
         val coverDataPart2 = CoverDataPart("2222", listOf())
         val db = DBMaker.fileDB("fileSet.db")
             .closeOnJvmShutdown()
@@ -150,7 +150,7 @@ class HelloKtTest {
                     .hashSet("set")//todo concurrent?
                     .serializer(Serializer.JAVA)
                     .createOrOpen()
-                val coverDataPart = CoverDataPart("sadsd", listOf(Epta("ads")))
+                val coverDataPart = CoverDataPart("sadsd", listOf(Opa("ads")))
                 val coverDataPart2 = CoverDataPart("2222", listOf())
 //        val aaa: KSerializer<CoverDataPart> = CoverDataPart.serializer()
 //        val serializer: KSerializer<CoverDataPart> = CoverDataPart::class.serializer()
@@ -196,7 +196,7 @@ class HelloKtTest {
 
     private suspend fun setttt(map: HTreeMap.KeySet<Any>) {
         for (i in 3..500) {
-            map.add(CoverDataPart("session$i", listOf(Epta("ads"))))
+            map.add(CoverDataPart("session$i", listOf(Opa("ads"))))
             println("set $i successfully")
             delay(1L)
         }

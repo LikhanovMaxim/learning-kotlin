@@ -1,14 +1,24 @@
 package com
 
-import kotlinx.collections.immutable.*
-import kotlin.collections.plus
-import kotlin.test.*
+import kotlinx.collections.immutable.persistentListOf
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class CollectionsKtTest {
 
     @Test
-    fun `change collection`() {
+    fun `check null`() {
+//        val newWeb = emptyList<String>()
+//        check(newWeb)
+//        val parameters = mapOf<String, String>("dd" to "dd")
+//        check(parameters["webAppNames"]?.split(":", ","))
+        check("".split(":", ","))
+    }
 
+    private fun check(newWeb: List<String>?) {
+        if (newWeb?.isNotEmpty() == true) {
+            println("yesss")
+        } else print("noooo")
     }
 
     @Test

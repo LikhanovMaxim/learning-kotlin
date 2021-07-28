@@ -1,15 +1,20 @@
 package com
 
-import jdk.nashorn.internal.runtime.regexp.joni.Regex
-import kotlin.time.*
+import kotlin.time.TimeSource
 
 fun main() {
     val a = TimeSource.Monotonic.markNow();
     println("hello")
     println(a.elapsedNow())
-
+    println(Smth::fiesddasd.name)
+    println(Smth::boolean2.name)
     Thread.sleep(10_000)
 }
+
+data class Smth(
+    val fiesddasd: String,
+    val boolean2: Boolean,
+)
 
 //lazy:
 val lazyValue: String by lazy {

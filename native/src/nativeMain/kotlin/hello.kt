@@ -12,6 +12,7 @@ import kotlinx.serialization.properties.Properties
 import net.mamoe.yamlkt.Yaml
 import platform.posix.getenv
 import platform.windows.booleanVar
+import kotlin.native.concurrent.AtomicReference
 import kotlin.native.concurrent.freeze
 import kotlin.random.Random
 
@@ -58,6 +59,74 @@ fun main() {
     val asAgentParams = properties.asAgentParams("\n", "#")
     println(asAgentParams)
 //    serializePropertiesFile()
+}
+
+
+private val _agentParam = AtomicReference<AgentParameter?>(null).freeze()
+
+var agentParam: AgentParameter
+    get() = _agentParam.value!!
+    set(value) {
+        _agentParam.value = value.freeze()
+    }
+
+private val _agentConfig = AtomicReference<AgentConfig?>(null).freeze()
+
+var agentConfig: AgentConfig
+    get() = _agentConfig.value!!
+    set(value: AgentConfig) {
+        _agentConfig.value = value.freeze()
+    }
+
+@Serializable
+data class AgentConfig(
+    val parameters: Map<String, AgentParameter> = emptyMap(),
+)
+
+@Serializable
+data class AgentParameter(
+    val type: String,
+    var valueParameter: String,//todo var ?
+    val description: String,
+    //todo is it need? if it is not editable it will be in AgentConfig
+    //todo remove it
+    val editable: Boolean = true,
+)
+
+fun mutable() {
+    val aaa = AgentParameter("String", "Opa", "desc smth")
+    println(aaa)
+    aaa.valueParameter = "updateParameter.value"
+    println(aaa)
+
+    agentConfig = AgentConfig(parameters = mapOf("aa" to aaa))
+
+    println("before $agentConfig")
+//    val agentParameters: Map<String, AgentParameter> = agentConfig.parameters
+//    agentConfig.freeze()
+//    agentParameters["aa"]?.let {
+//        it.valueParameter = "updateParameter.value"
+//    }
+    agentConfig = agentConfig.copy(parameters = mapOf("aa" to aaa.copy(valueParameter = "neeeewww")))
+    println(agentConfig)
+
+}
+
+fun mutableParams(updateParameters: Map<String, String>) {
+    val aaa = AgentParameter("String", "Opa", "desc smth")
+    val aaa2 = AgentParameter("String", "ffff", "desc another")
+    agentConfig = AgentConfig(parameters = mapOf("first" to aaa, "second" to aaa2))
+    println("before $agentConfig")
+
+    val newParameters = HashMap(agentConfig.parameters)
+    updateParameters.forEach { updateParameter ->
+        newParameters[updateParameter.key]?.let {
+            newParameters[updateParameter.key] = it.copy(valueParameter = updateParameter.value)
+        }
+    }
+    agentConfig = agentConfig.copy(parameters = newParameters)
+    println(agentConfig)
+
 }
 
 fun setBooleanNative(probeCount: Int = 1000 * 1024): BooleanArray {

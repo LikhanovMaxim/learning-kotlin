@@ -1,12 +1,29 @@
-import com.*
-import kotlinx.serialization.*
-import kotlinx.serialization.properties.*
-import net.mamoe.yamlkt.*
-import kotlin.test.*
+import com.asAgentParams
+import com.asAgentParamsProperties
+import com.parseAs
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.properties.Properties
+import net.mamoe.yamlkt.Yaml
+import kotlin.test.Ignore
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @InternalSerializationApi
 @ExperimentalSerializationApi
 class HelloKtTest {
+    @Test
+    fun `should mutable`() {
+        mutable()
+    }
+
+    @Test
+    fun `should mutable 222`() {
+        mutableParams(mapOf("first" to "opa tut"))
+    }
+
     @Test
     fun `should parse arg from agent options`() {
         val str = "configPath=myVersion/configFile.properties"

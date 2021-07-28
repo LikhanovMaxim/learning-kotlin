@@ -9,7 +9,6 @@ fun main() {
 
     val ret = NativeHost().callInt(42)
     println("ret from the native: $ret")
-
 }
 actual class MyExpect {
     actual external fun transform(smth: String)
