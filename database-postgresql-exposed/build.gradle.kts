@@ -2,32 +2,24 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     id("kotlinx-atomicfu")
-    id("org.jetbrains.kotlin.plugin.jpa") version "1.5.31"
     application
 }
 
 application {
-    mainClassName = "com.HelloPostgresKt" //TODO package
+    mainClassName = "com.HelloPostgresExpodusKt" //TODO package
 }
-
-val serializationVersion: String by project
+val exposedVersion = "0.35.3"
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.postgresql:postgresql:42.3.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
-// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     implementation("org.slf4j:slf4j-api:1.7.32")
 
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm")
-
-// https://mvnrepository.com/artifact/org.hibernate/hibernate-core
-    implementation("org.hibernate:hibernate-core:5.6.0.Final")
-// https://mvnrepository.com/artifact/org.hibernate/hibernate-testing
-    testImplementation("org.hibernate:hibernate-testing:5.6.0.Final")
-// https://mvnrepository.com/artifact/com.h2database/h2
-    testImplementation("com.h2database:h2:1.4.200")
 
     testImplementation(project(":common-util"))
     testImplementation(kotlin("test-junit5"))

@@ -1,31 +1,61 @@
 package com
 
+import kotlinx.serialization.Serializable
 import org.hibernate.SessionFactory
 import org.hibernate.boot.MetadataSources
 import org.hibernate.boot.registry.StandardServiceRegistry
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder
+import java.sql.DriverManager
+import java.util.*
 import javax.persistence.*
 
-
 fun main() {
-    println("hello")
+    println("hello posgresql")
 
-    HibernateUtil.sessionFactory?.openSession()?.use {
-        val transaction = it.beginTransaction()
-        it.save(Person(12, "Tomas"))
-        transaction.commit()
-    }
+    jdbcConnect()
 
+//    hibernate()
+//    doInHib
+}
+
+private fun hibernate() {
     HibernateUtil.sessionFactory?.openSession()?.use {
         val list = it.createQuery("from Person", Person::class.java).list()
         println(list.first().name)
         println("size = ${list.size}")
     }
-
 }
 
+private fun jdbcConnect() {
+    //    Database.connect(
+//        "jdbc:postgresql://localhost:5432/postgres", driver = "org.postgresql.Driver",
+//        user = "postgres", password = "admin123"
+//    )
+    val url = "jdbc:postgresql://localhost:5432/postgres"
+    val props = Properties()
+    props.setProperty("user", "postgres")
+    props.setProperty("password", "mysecretpassword")
+//    props.setProperty("ssl", "true")
+    val con = DriverManager.getConnection(url, props)
+    val st = con.createStatement()
+    val rs = st.executeQuery("select data from table_json")
+
+    val json = rs.next()
+    println(json)
+    val message = rs.getString(1)
+    println(message)
+//    Json.
+    rs.close()
+    st.close()
+}
+
+@Serializable
+data class ExampleJson(
+    val name: String,
+    val count: Int
+)
+
 @Entity
-@Table(name = "person")
 class Person(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +64,7 @@ class Person(
     @Column(nullable = false)
     val name: String
 )
+
 
 object HibernateUtil {
     private var registry: StandardServiceRegistry? = null

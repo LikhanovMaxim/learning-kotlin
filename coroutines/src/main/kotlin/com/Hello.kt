@@ -5,9 +5,13 @@ import kotlin.system.measureTimeMillis
 
 /**
  * GlobalScope
- * async like Callable in Java
- * launch like Runnable in Java
- * runBlocking
+ * async like Callable in Java with return value
+ * launch like Runnable in Java with void
+ * - we can job.join when run launch.
+ * runBlocking - coroutine builder that bridges the non-coroutine world of a regular
+ *
+ * CoroutineScope
+ *
  */
 fun main() {
     println("starting...")
@@ -17,6 +21,9 @@ fun main() {
     }
 //    thirdExampleRunBlocking()
 
+    runBlocking {
+        delay(100)
+    }
     println("hi from main")
 //    firstExample()
 
