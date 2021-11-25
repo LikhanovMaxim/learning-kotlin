@@ -215,5 +215,13 @@ class HelloKtTest {
             throw IllegalArgumentException("wrong agent parameters: $this")
         }
     }
+    @Test
+    fun `second test`() {
+        assertEquals(3, 2)
+    }
+    @Test
+    fun `third test`() {
+        assertTrue(3 == 2)
+    }
 
 }
